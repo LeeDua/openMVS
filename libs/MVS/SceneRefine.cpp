@@ -371,6 +371,7 @@ MeshRefine::MeshRefine(Scene& _scene, unsigned _nReduceMemory, unsigned _nAltern
 	FOREACH(idxImage, images)
 		events.AddEvent(new EVTSelectNeighbors(idxImage, mapPairs, nMaxViews));
 	WaitThreadWorkers(images.GetSize());
+	std::cout << "Nearest image pairs: " << mapPairs.size() << std::endl;
 	pairs.Reserve(mapPairs.size());
 	for (uint64_t pair: mapPairs)
 		pairs.AddConstruct(pair);
