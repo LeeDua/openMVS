@@ -364,6 +364,7 @@ MeshRefine::MeshRefine(Scene& _scene, unsigned _nReduceMemory, unsigned _nAltern
 	FOREACHPTR(pThread, threads)
 		pThread->start(ThreadWorkerTmp, this);
 	// keep only best neighbor views for each image
+	std::cout << "Nearest image pair selection starts, total images: " << images.GetSize() << std::endl;
 	std::unordered_set<uint64_t> mapPairs;
 	mapPairs.reserve(images.GetSize()*nMaxViews);
 	ASSERT(events.IsEmpty());
