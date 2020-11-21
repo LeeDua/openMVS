@@ -1086,8 +1086,10 @@ void MeshRefine::ThSelectNeighbors(uint32_t idxImage, std::unordered_set<uint64_
 void MeshRefine::ThInitImage(uint32_t idxImage, Real scale, Real sigma)
 {
 	Image& imageData = images[idxImage];
-	if (!imageData.IsValid())
+	if (!imageData.IsValid()){
+		std::cout << "image data of " << idxImage << " invalid, init image failed" << std::endl;
 		return;
+	}
 	// load and init image
 	unsigned level(nResolutionLevel);
 	const unsigned imageSize(imageData.RecomputeMaxResolution(level, nMinResolution));
