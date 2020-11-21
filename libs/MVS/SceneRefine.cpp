@@ -1075,6 +1075,7 @@ void MeshRefine::ThSelectNeighbors(uint32_t idxImage, std::unordered_set<uint64_
 	const Image& imageData = images[idxImage];
 	if (!imageData.IsValid())
 		return;
+	std::cout << "Image " << idxImage << "legal ,neighbor view filter starts." << std::endl; 
 	ViewScoreArr neighbors(imageData.neighbors);
 	Scene::FilterNeighborViews(neighbors, fMinArea, fMinScale, fMaxScale, fMinAngle, fMaxAngle, nMaxViews);
 	Lock l(cs);
