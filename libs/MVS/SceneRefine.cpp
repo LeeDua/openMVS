@@ -1075,7 +1075,7 @@ void MeshRefine::ThSelectNeighbors(uint32_t idxImage, std::unordered_set<uint64_
 	const Image& imageData = images[idxImage];
 	if (!imageData.IsValid())
 		return;
-	std::cout << "Image " << idxImage << "legal ,neighbor view filter starts." << std::endl; 
+	// std::cout << "Image " << idxImage << "legal ,neighbor view filter starts. Neighor count: " << imageData.neighbors.size() << std::endl; 
 	ViewScoreArr neighbors(imageData.neighbors);
 	Scene::FilterNeighborViews(neighbors, fMinArea, fMinScale, fMaxScale, fMinAngle, fMaxAngle, nMaxViews);
 	Lock l(cs);
@@ -1088,7 +1088,7 @@ void MeshRefine::ThInitImage(uint32_t idxImage, Real scale, Real sigma)
 {
 	Image& imageData = images[idxImage];
 	if (!imageData.IsValid()){
-		std::cout << "image data of " << idxImage << " invalid, init image failed" << std::endl;
+		// std::cout << "image data of " << idxImage << " invalid, init image failed" << std::endl;
 		return;
 	}
 	// load and init image
@@ -1309,9 +1309,12 @@ bool Scene::RefineMesh(unsigned nResolutionLevel, unsigned nMinResolution, unsig
 {
 	MeshRefine refine(*this, nReduceMemory, nAlternatePair, fRegularityWeight, fRatioRigidityElasticity, nResolutionLevel, nMinResolution, nMaxViews, nMaxThreads);
 	if (!refine.IsValid()){
-		std::cout << "Refine setup in valid" << std::endl;
+		std::cout << "Refine setup invalid" << std::endl;
 		return false;
 	}
+
+	std::cout << "REFINE SETUP VALID!" << std::endl;
+
 
 	// run the mesh optimization on multiple scales (coarse to fine)
 	for (unsigned nScale=0; nScale<nScales; ++nScale) {
@@ -1322,14 +1325,22 @@ bool Scene::RefineMesh(unsigned nResolutionLevel, unsigned nMinResolution, unsig
 		if (!refine.InitImages(scale, Real(0.12)*step+Real(0.2)))
 			return false;
 
+		std::cout << "IMAGES INIT DONE in scale " << nScale << std::endl;
+
 		// extract array of triangles incident to each vertex
 		refine.ListVertexFacesPre();
+
+		std::cout << "ListVertexFacesPre DONE in scale " << nScale << std::endl;
 
 		// automatic mesh subdivision
 		refine.SubdivideMesh(nMaxFaceArea, nScale == 0 ? fDecimateMesh : 1.f, nCloseHoles, nEnsureEdgeSize);
 
+		std::cout << "SubdivideMesh DONE in scale " << nScale << std::endl;
+
 		// extract array of triangle normals
 		refine.ListVertexFacesPost();
+
+		std::cout << "ListVertexFacesPost DONE in scale " << nScale << std::endl;
 
 		#if TD_VERBOSE != TD_VERBOSE_OFF
 		if (VERBOSITY_LEVEL > 2)
@@ -1389,6 +1400,7 @@ bool Scene::RefineMesh(unsigned nResolutionLevel, unsigned nMinResolution, unsig
 			Util::Progress progress(_T("Processed iterations"), iters);
 			GET_LOGCONSOLE().Pause();
 			for (int iter=0; iter<iters; ++iter) {
+				std::cout << "REFINE STEP: " << iter << "starts" << std::endl;
 				refine.iteration = (unsigned)iter;
 				refine.nAlternatePair = (iter+1 < iters ? nAlternatePair : 0);
 				refine.ratioRigidityElasticity = (iter <= iterStop ? fRatioRigidityElasticity : 1.f);
