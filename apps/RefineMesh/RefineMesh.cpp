@@ -247,6 +247,7 @@ int main(int argc, LPCTSTR* argv)
 							  OPT::fRatioRigidityElasticity,
 							  OPT::fGradientStep))
 	#endif
+	std::cout << "Mesh Refine starts without gpu" << std::endl;
 	if (!scene.RefineMesh(OPT::nResolutionLevel, OPT::nMinResolution, OPT::nMaxViews,
 						  OPT::fDecimateMesh, OPT::nCloseHoles, OPT::nEnsureEdgeSize,
 						  OPT::nMaxFaceArea,

@@ -53,7 +53,7 @@ SET(OpenMVS_USE_FAST_CBRT ON CACHE BOOL "Use an optimized code to compute the cu
 SET(OpenMVS_USE_SSE ON CACHE BOOL "Enable SSE optimizations")
 SET(OpenMVS_USE_OPENMP ON CACHE BOOL "Enable OpenMP library")
 SET(OpenMVS_USE_OPENGL ON CACHE BOOL "Enable OpenGL library")
-SET(OpenMVS_USE_CUDA ON CACHE BOOL "Enable CUDA library")
+SET(OpenMVS_USE_CUDA OFF  CACHE BOOL "Enable CUDA library")
 SET(OpenMVS_USE_BREAKPAD ON CACHE BOOL "Enable BreakPad library")
 SET(OpenMVS_CONFIG_INCLUDE_DIR "${CMAKE_BINARY_DIR}/" CACHE PATH "Where to create the build/platform specific header")
 
@@ -94,7 +94,7 @@ if(OpenMVS_USE_OPENGL)
 endif()
 
 if(OpenMVS_USE_CUDA)
-	FIND_PACKAGE(CUDA)
+
 	if(CUDA_FOUND)
 		INCLUDE_DIRECTORIES(${CUDA_INCLUDE_DIRS})
 		ADD_DEFINITIONS(-D_USE_CUDA)
@@ -171,7 +171,7 @@ ADD_DEFINITIONS(${OpenMVS_DEFINITIONS})
 # Add modules
 ADD_SUBDIRECTORY(libs)
 ADD_SUBDIRECTORY(apps)
-ADD_SUBDIRECTORY(docs)
+
 
 if(OpenMVS_USE_CERES)
 	SET(_USE_CERES TRUE)
