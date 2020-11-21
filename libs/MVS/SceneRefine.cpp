@@ -289,6 +289,7 @@ public:
 	Real scale, sigma;
 	bool Run(void* pArgs) {
 		((MeshRefine*)pArgs)->ThInitImage(idxImage, scale, sigma);
+		std::cout << "EVTInitImage DONE: " << idxImage << std::endl;
 		return true;
 	}
 	EVTInitImage(uint32_t _idxImage, Real _scale, Real _sigma) : Event(EVT_JOB), idxImage(_idxImage), scale(_scale), sigma(_sigma) {}
@@ -1094,8 +1095,10 @@ void MeshRefine::ThInitImage(uint32_t idxImage, Real scale, Real sigma)
 	// load and init image
 	unsigned level(nResolutionLevel);
 	const unsigned imageSize(imageData.RecomputeMaxResolution(level, nMinResolution));
-	if ((imageData.image.empty() || MAXF(imageData.width,imageData.height) != imageSize) && !imageData.ReloadImage(imageSize))
+	if ((imageData.image.empty() || MAXF(imageData.width,imageData.height) != imageSize) && !imageData.ReloadImage(imageSize)){
 		ABORT("can not load image");
+		std::cout << "CAN NOT LOAD IMAGE " << idxImage << std::endl;
+	}
 	View& view = views[idxImage];
 	Image32F& img = view.image;
 	imageData.image.toGray(img, cv::COLOR_BGR2GRAY, true);
@@ -1127,6 +1130,7 @@ void MeshRefine::ThInitImage(uint32_t idxImage, Real scale, Real sigma)
 	cv::filter2D(img, grad[1], cv::DataType<GradType>::type, kernel.t());
 	#endif
 	cv::merge(grad, 2, view.imageGrad);
+	std::cout << "IMAGE LOADED " << idxImage << std::endl;
 }
 void MeshRefine::ThProjectMesh(uint32_t idxImage, const CameraFaces& cameraFaces)
 {
