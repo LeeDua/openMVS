@@ -496,6 +496,7 @@ void MeshRefine::ListFaceAreas(Mesh::AreaArr& maxAreas)
 	maxAreas.Resize(faces.GetSize());
 	maxAreas.Memset(0);
 	FOREACHPTR(pPair, pairs) {
+		std::cout << "Pair " << pPair->i << " " << pPair->j << " ,total images: " << images.GetSize() << std::endl;
 		const Mesh::AreaArr& areasA = viewAreas[pPair->i];
 		const Mesh::AreaArr& areasB = viewAreas[pPair->j];
 		ASSERT(areasA.GetSize() == areasB.GetSize());
