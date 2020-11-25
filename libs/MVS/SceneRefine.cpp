@@ -476,12 +476,14 @@ void MeshRefine::ListFaceAreas(Mesh::AreaArr& maxAreas)
 		areas.Resize(faces.GetSize());
 		areas.Memset(0);
 		const FaceMap& faceMap = views[idxImage].faceMap;
+		std::cout << "ListFaceAreas Image :  " << faceMap.rows << " " << faceMap.cols << " "  << images[idxImage].name << std::endl;
+
 		// compute area covered by all vertices (incident faces) viewed by this image
 		for (int j=0; j<faceMap.rows; ++j) {
 			for (int i=0; i<faceMap.cols; ++i) {
 				const FIndex idxFace(faceMap(j,i));
-				std::cout << "Going to assert : " << images[idxImage].name << std::endl;
-				// ASSERT((idxFace == NO_ID && views[idxImage].depthMap(j,i) == 0) || (idxFace != NO_ID && views[idxImage].depthMap(j,i) > 0));
+				// std::cout << "Going to assert : " << images[idxImage].name << std::endl;
+				ASSERT((idxFace == NO_ID && views[idxImage].depthMap(j,i) == 0) || (idxFace != NO_ID && views[idxImage].depthMap(j,i) > 0));
 				// std::cout << "Assertion done " <<  images[idxImage].name << std::endl;
 				if (idxFace == NO_ID)
 					continue;
