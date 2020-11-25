@@ -489,7 +489,7 @@ void MeshRefine::ListFaceAreas(Mesh::AreaArr& maxAreas)
 			}
 		}
 	}
-	std::cout << "Iter through face map : " << images[idxImage].name << std::endl;
+	std::cout << "Iter through face map " << std::endl;
 	// for each pair, mark the faces that have big projection areas in both images
 	maxAreas.Resize(faces.GetSize());
 	maxAreas.Memset(0);
