@@ -154,15 +154,15 @@ int main(int argc, LPCTSTR* argv)
 	
 	std::cout << "Mesh Refine starts without gpu" << std::endl;
 
-	std::unordered_set<String> imgSet;
+	std::unordered_set<std::string> imgSet;
 	std::ifstream ifs;
 	ifs.open(ViewFilter::strFilterFileName, std::ifstream::in);
-	String line;
+	std::string line;
 	std::cout << "Start reading filter file" << std::endl;
 	while(getline(ifs, line)){
 		if(line=="")continue;
 		std::cout << line << std::endl;
-		String basename = "";
+		std::string basename = "";
 		/*std::size_t start = line.find_last_of("/");
 		std::size_t end = line.find(".");
 		if (start!=std::string::npos && end!=std::string::npos){
@@ -171,7 +171,7 @@ int main(int argc, LPCTSTR* argv)
 		}*/
 		
 		std::size_t ptr = line.find(" ");
-		if (ptr!=-1)
+		if (ptr!=std::string::npos)
 			basename = line.substr(0,ptr);
 		std::cout << "File name extracted: " << basename << std::endl;
 		imgSet.insert(basename);
@@ -179,15 +179,19 @@ int main(int argc, LPCTSTR* argv)
 
 
 	std::cout << "Images in scene." << std::endl;
-	std::vector<Image> filtered_images;
+	ImageArr filtered_images;
 	for(auto imgIter:scene.images){
-		std::cout << imgIter.name << std::endl;
+		//std::cout << imgIter.name << std::endl;
 		if(imgSet.find(imgIter.name)!=imgSet.end()){
-			filtered_images.push(imgIter);
+			std::cout << "Image : " << imgIter.name << "IN SET" << std::endl;
+			filtered_images.push_back(imgIter);
 		}
 	}
-	assert(filtered_images.size() == imgSet.size());
-	scene.images = filtered_images;
+	std::cout << "Filtered: "  << filtered_images.size() << std::endl;
+	scene.images.swap(filtered_images);
+
+	std::cout << "Filtered: "  << scene.images.size() << std::endl;
+
 	
 	VERBOSE("Mesh refinement completed: %u vertices, %u faces (%s)", scene.mesh.vertices.GetSize(), scene.mesh.faces.GetSize(), TD_TIMER_GET_FMT().c_str());
 
