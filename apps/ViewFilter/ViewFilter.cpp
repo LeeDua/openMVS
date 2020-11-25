@@ -179,9 +179,15 @@ int main(int argc, LPCTSTR* argv)
 
 
 	std::cout << "Images in scene." << std::endl;
+	std::vector<Image> filtered_images;
 	for(auto imgIter:scene.images){
 		std::cout << imgIter.name << std::endl;
+		if(imgSet.find(imgIter.name)!=imgSet.end()){
+			filtered_images.push(imgIter);
+		}
 	}
+	assert(filtered_images.size() == imgSet.size());
+	scene.images = filtered_images;
 	
 	VERBOSE("Mesh refinement completed: %u vertices, %u faces (%s)", scene.mesh.vertices.GetSize(), scene.mesh.faces.GetSize(), TD_TIMER_GET_FMT().c_str());
 
