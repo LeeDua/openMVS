@@ -1087,6 +1087,9 @@ void MeshRefine::ThSelectNeighbors(uint32_t idxImage, std::unordered_set<uint64_
 	Scene::FilterNeighborViews(neighbors, fMinArea, fMinScale, fMaxScale, fMinAngle, fMaxAngle, nMaxViews);
 	Lock l(cs);
 	FOREACHPTR(pNeighbor, neighbors) {
+		if(pNeighbor->idx.ID >= images.size()){
+			std::cout << "INVALID NEIGHBOR ID" << std::endl;
+		}
 		ASSERT(images[pNeighbor->idx.ID].IsValid());
 		mapPairs.insert(MakePairIdx((uint32_t)idxImage, pNeighbor->idx.ID));
 	}
