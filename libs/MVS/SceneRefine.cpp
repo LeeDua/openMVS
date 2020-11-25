@@ -76,8 +76,8 @@ typedef Mesh::VIndex VIndex;
 typedef Mesh::Face Face;
 typedef Mesh::FIndex FIndex;
 
-public:
 class MeshRefine {
+public:
 	typedef TPoint3<Real> Grad;
 	typedef CLISTDEF0IDX(Grad,VIndex) GradArr;
 
