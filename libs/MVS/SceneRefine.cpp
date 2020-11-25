@@ -481,8 +481,8 @@ void MeshRefine::ListFaceAreas(Mesh::AreaArr& maxAreas)
 			for (int i=0; i<faceMap.cols; ++i) {
 				const FIndex idxFace(faceMap(j,i));
 				std::cout << "Going to assert : " << images[idxImage].name << std::endl;
-				ASSERT((idxFace == NO_ID && views[idxImage].depthMap(j,i) == 0) || (idxFace != NO_ID && views[idxImage].depthMap(j,i) > 0));
-				std::cout << "Assertion done " <<  images[idxImage].name << std::endl;
+				// ASSERT((idxFace == NO_ID && views[idxImage].depthMap(j,i) == 0) || (idxFace != NO_ID && views[idxImage].depthMap(j,i) > 0));
+				// std::cout << "Assertion done " <<  images[idxImage].name << std::endl;
 				if (idxFace == NO_ID)
 					continue;
 				++areas[idxFace];
