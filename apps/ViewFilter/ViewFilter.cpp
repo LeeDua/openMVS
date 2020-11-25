@@ -53,12 +53,15 @@ bool Initialize(size_t argc, LPCTSTR* argv)
 		;
 
 	// group of options allowed both on command line and in config file
-	boost::program_options::options_description config("Refine options");
+	boost::program_options::options_description config("Viewfilter options");
 	config.add_options()
 		("input-file,i", boost::program_options::value<std::string>(&ViewFilter::strInputFileName), "input filename containing camera poses and image list")
 		("input-filter-file,f", boost::program_options::value<std::string>(&ViewFilter::strFilterFileName), "input filter file name")
 		("output-file,o", boost::program_options::value<std::string>(&ViewFilter::strOutputFileName), "output filename for storing the mesh")
 		;
+	
+	boost::program_options::options_ddscription cmdline_options;
+	cmd_line_options.add(generic).add(config);
 
 	boost::program_options::positional_options_description p;
 	p.add("input-file", -1);
@@ -152,19 +155,19 @@ int main(int argc, LPCTSTR* argv)
 	std::cout << "Mesh Refine starts without gpu" << std::endl;
 
 	std::unordered_set<String> imgSet;
-	ifstream ifs;
+	std::ifstream ifs;
 	ifs.open(ViewFilter::strFilterFileName, std::ifstream::in);
-	string line;
+	String line;
 	std::cout << "Start reading filter file" << std::endl;
 	while(getline(ifs, line)){
 		if(line=="")continue;
-		std::cout << line;
+		std::cout << line << std::endl;
 		String basename = "";
 		std::size_t start = line.find_last_of("/");
 		std::size_t end = line.find(".");
-		if (found!=std::string::npos && end!=std::string::npos){
+		if (start!=std::string::npos && end!=std::string::npos){
 			basename = line.substr(start+1, end-start-1);
-			std::endl << "File name extracted" << std::endl;
+			std::cout << "File name extracted" << std::endl;
 		}
 		imgSet.insert(basename);
 	}
@@ -172,7 +175,7 @@ int main(int argc, LPCTSTR* argv)
 
 	std::cout << "Images in scene." << std::endl;
 	for(auto imgIter:scene.images){
-		std::cout << imgIter->name << std::endl;
+		std::cout << imgIter.name << std::endl;
 	}
 	
 	VERBOSE("Mesh refinement completed: %u vertices, %u faces (%s)", scene.mesh.vertices.GetSize(), scene.mesh.faces.GetSize(), TD_TIMER_GET_FMT().c_str());
