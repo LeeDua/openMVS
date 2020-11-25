@@ -187,10 +187,14 @@ int main(int argc, LPCTSTR* argv)
 			filtered_images.push_back(imgIter);
 		}
 	}
-	std::cout << "Filtered: "  << filtered_images.size() << std::endl;
 	scene.images.swap(filtered_images);
 
-	std::cout << "Filtered: "  << scene.images.size() << std::endl;
+	std::cout << "Filtered Images in scene: "  << scene.images.size() << std::endl;
+
+
+	for(auto imgIter:scene.images){
+		std::cout << imgIter.name << std::endl;
+	}
 
 	
 	VERBOSE("Mesh refinement completed: %u vertices, %u faces (%s)", scene.mesh.vertices.GetSize(), scene.mesh.faces.GetSize(), TD_TIMER_GET_FMT().c_str());
