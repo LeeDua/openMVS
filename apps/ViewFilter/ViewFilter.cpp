@@ -60,8 +60,8 @@ bool Initialize(size_t argc, LPCTSTR* argv)
 		("output-file,o", boost::program_options::value<std::string>(&ViewFilter::strOutputFileName), "output filename for storing the mesh")
 		;
 	
-	boost::program_options::options_ddscription cmdline_options;
-	cmd_line_options.add(generic).add(config);
+	boost::program_options::options_description cmdline_options;
+	cmdline_options.add(generic).add(config);
 
 	boost::program_options::positional_options_description p;
 	p.add("input-file", -1);
@@ -163,12 +163,17 @@ int main(int argc, LPCTSTR* argv)
 		if(line=="")continue;
 		std::cout << line << std::endl;
 		String basename = "";
-		std::size_t start = line.find_last_of("/");
+		/*std::size_t start = line.find_last_of("/");
 		std::size_t end = line.find(".");
 		if (start!=std::string::npos && end!=std::string::npos){
 			basename = line.substr(start+1, end-start-1);
 			std::cout << "File name extracted" << std::endl;
-		}
+		}*/
+		
+		std::size_t ptr = line.find(" ");
+		if (ptr!=-1)
+			basename = line.substr(0,ptr);
+		std::cout << "File name extracted: " << basename << std::endl;
 		imgSet.insert(basename);
 	}
 
