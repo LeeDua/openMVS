@@ -76,8 +76,8 @@ typedef Mesh::VIndex VIndex;
 typedef Mesh::Face Face;
 typedef Mesh::FIndex FIndex;
 
-class MeshRefine {
 public:
+class MeshRefine {
 	typedef TPoint3<Real> Grad;
 	typedef CLISTDEF0IDX(Grad,VIndex) GradArr;
 
@@ -480,13 +480,16 @@ void MeshRefine::ListFaceAreas(Mesh::AreaArr& maxAreas)
 		for (int j=0; j<faceMap.rows; ++j) {
 			for (int i=0; i<faceMap.cols; ++i) {
 				const FIndex idxFace(faceMap(j,i));
+				std::cout << "Going to assert : " << images[idxImage].name << std::endl;
 				ASSERT((idxFace == NO_ID && views[idxImage].depthMap(j,i) == 0) || (idxFace != NO_ID && views[idxImage].depthMap(j,i) > 0));
+				std::cout << "Assertion done " <<  images[idxImage].name << std::endl;
 				if (idxFace == NO_ID)
 					continue;
 				++areas[idxFace];
 			}
 		}
 	}
+	std::cout << "Iter through face map : " << images[idxImage].name << std::endl;
 	// for each pair, mark the faces that have big projection areas in both images
 	maxAreas.Resize(faces.GetSize());
 	maxAreas.Memset(0);
