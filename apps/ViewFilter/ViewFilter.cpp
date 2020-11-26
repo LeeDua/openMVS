@@ -197,7 +197,7 @@ int main(int argc, LPCTSTR* argv)
 		if(imgSet.find(imgIter.name)!=imgSet.end()){
 			ViewScoreArr neighbors(imgIter.neighbors);
 			int count = neighbors.GetSize();
-			FOREACHPTR(pNeighbor, neighbors) {
+			for(auto pNeighbor=neighbors.begin();pNeighbor!=neighbors.end();pNeighbor++) {
 				Image& neighImg = scene.images[pNeighbor->idx.ID];
 				if(imgSet.find(neighImg.name)==imgSet.end()){
 					neighbors.erase(pNeighbor);
@@ -217,7 +217,8 @@ int main(int argc, LPCTSTR* argv)
 	std::cout << "Filtered Images in scene: "  << scene.images.size() << std::endl;
 
 	for(auto imgIter:scene.images){
-		FOREACHPTR(pNeighbor, neighbors) {
+		ViewScoreArr neighbors(imgIter.neighbors);
+		for(auto pNeighbor=neighbors.begin();pNeighbor!=neighbors.end();pNeighbor++) {		
 			assert(pNeighbor->idx.ID<scene.images.size());			
 		}
 	}
