@@ -155,6 +155,7 @@ int main(int argc, LPCTSTR* argv)
 	std::cout << "Mesh Refine starts without gpu" << std::endl;
 
 	std::unordered_set<std::string> imgSet;
+	std::unordered_map<std::string, uint32_t> imgMap;
 	std::ifstream ifs;
 	ifs.open(ViewFilter::strFilterFileName, std::ifstream::in);
 	std::string line;
@@ -181,9 +182,33 @@ int main(int argc, LPCTSTR* argv)
 	std::cout << "Images in scene." << std::endl;
 	ImageArr filtered_images;
 	for(auto imgIter:scene.images){
+		if(imgSet.find(imgIter.name)!=imgSet.end()){
+			filtered_images.push_back(imgIter);
+		}
+	}
+	for(uint32_t i=0;i<filtered_images.size();i++){
+		imgMap.insert(filtered_images[i], i);
+	}
+
+	filtered_images.clear();
+
+	for(auto imgIter:scene.images){
 		//std::cout << imgIter.name << std::endl;
 		if(imgSet.find(imgIter.name)!=imgSet.end()){
-			std::cout << "Image : " << imgIter.name << "IN SET" << std::endl;
+			ViewScoreArr neighbors(imgIter.neighbors);
+			int count = neighbors.GetSize();
+			FOREACHPTR(pNeighbor, neighbors) {
+				Image& neighImg = scene.images[pNeighbor->idx.ID];
+				if(imgSet.find(neighImg.name)==imgSet.end()){
+					neighbors.erase(pNeighbor);
+					continue;
+				}
+				pNeighbor->idx.ID=imgMap[neighImg.name];
+			}
+			imgIter.neighbors = neighbors;
+			if(imgIter.neighbors.GetSize()!=count){
+				std::cout << "Remove illegal neighbors of image " << imgIter.neighbors.GetSize() - count << " " << imgIter.name << std::endl;
+			}
 			filtered_images.push_back(imgIter);
 		}
 	}
@@ -191,9 +216,10 @@ int main(int argc, LPCTSTR* argv)
 
 	std::cout << "Filtered Images in scene: "  << scene.images.size() << std::endl;
 
-
 	for(auto imgIter:scene.images){
-		std::cout << imgIter.name << std::endl;
+		FOREACHPTR(pNeighbor, neighbors) {
+			assert(pNeighbor->idx.ID<scene.images.size());			
+		}
 	}
 
 	
