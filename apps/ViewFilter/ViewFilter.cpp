@@ -187,7 +187,7 @@ int main(int argc, LPCTSTR* argv)
 		}
 	}
 	for(uint32_t i=0;i<filtered_images.size();i++){
-		imgMap.insert(filtered_images[i], i);
+		imgMap.insert(filtered_images[i].name, i);
 	}
 
 	filtered_images.clear();
