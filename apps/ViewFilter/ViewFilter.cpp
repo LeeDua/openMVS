@@ -201,6 +201,7 @@ int main(int argc, LPCTSTR* argv)
 				Image& neighImg = scene.images[pNeighbor->idx.ID];
 				if(imgSet.find(neighImg.name)==imgSet.end()){
 					neighbors.erase(pNeighbor);
+					pNeighbor--;
 					continue;
 				}
 				pNeighbor->idx.ID=imgMap[neighImg.name];
